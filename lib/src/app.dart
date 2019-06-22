@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
-import 'helpers/global_translations.dart';
+import 'utils/global_translations.dart';
 import 'screens/home_screen.dart';
 
 class App extends StatefulWidget {
@@ -16,7 +16,7 @@ class _AppState extends State<App> {
   void initState() {
     super.initState();
 
-    allTranslations.onLocaleChangedCallback = _onLocaleChanged;
+//    allTranslations.onLocaleChangedCallback = _onLocaleChanged;
   }
 
   @override
@@ -31,7 +31,7 @@ class _AppState extends State<App> {
     );
   }
 
-  _onLocaleChanged() async {
+  void _onLocaleChanged() async {
     print('Language has been changed to: ${allTranslations.currentLanguage}');
   }
 }

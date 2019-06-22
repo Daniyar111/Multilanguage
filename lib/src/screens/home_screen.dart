@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../helpers/global_translations.dart';
+import '../utils/global_translations.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
