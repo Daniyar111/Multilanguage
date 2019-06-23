@@ -1,0 +1,34 @@
+{
+  "homeScreen": {
+    "title": "Название страницы",
+    "buttons": {
+      "russian": "Русский",
+      "english": "English",
+      "selectDate": "Выберите дату"
+    },
+    "tests": {
+      "string_values": "Меня зовут {{name}} и я живу в {{country}}.",
+      "string_plural": {
+        "=0": "У меня нет детей",
+        "=1": "У меня есть ребенок",
+        ">1": "У меня есть несколько детей"
+      },
+      "string_gender": {
+        "male": "Я мужчина",
+        "female": "Я женщина",
+        "other": "Не указано"
+      },
+      "string_gender_values": {
+        "male": "Я мужчина. Рост: {{size}}",
+        "female": "Я женщина. Рост: {{size}}",
+        "other": "Не указано"
+      }
+    },
+    "values": {
+      "my_country": "Кыргызстан"
+    }
+  },
+  "other_screen": {
+    "title": "Название другой страницы"
+  }
+}

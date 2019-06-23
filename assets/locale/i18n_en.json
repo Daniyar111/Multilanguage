@@ -1,0 +1,34 @@
+{
+  "homeScreen": {
+    "title": "Title of my Screen",
+    "buttons": {
+      "russian": "Русский",
+      "english": "English",
+      "selectDate": "Select a date"
+    },
+    "tests": {
+      "string_values": "My name is {{name}} and I live in {{country}}.",
+      "string_plural": {
+        "=0": "I have no children",
+        "=1": "I have a child",
+        ">1": "I have several children"
+      },
+      "string_gender": {
+        "male": "I am a man",
+        "female": "I am a woman",
+        "other": "Not specified"
+      },
+      "string_gender_values": {
+        "male": "I am a man. Height: {{size}}",
+        "female": "I am a woman. Height: {{size}}",
+        "other": "Not specified"
+      }
+    },
+    "values": {
+      "my_country": "Kyrgyzstan"
+    }
+  },
+  "other_screen": {
+    "title": "Title of other Screen"
+  }
+}

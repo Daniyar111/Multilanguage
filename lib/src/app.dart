@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
+import 'screens/other_screen.dart';
 import 'utils/global_translations.dart';
 import 'screens/home_screen.dart';
+import 'data/blocs/translations_bloc.dart';
+import 'data/blocs/bloc_provider.dart';
 
 class App extends StatefulWidget {
 
@@ -12,26 +15,47 @@ class App extends StatefulWidget {
 
 class _AppState extends State<App> {
 
+  TranslationsBloc translationsBloc;
+
   @override
   void initState() {
     super.initState();
 
-//    allTranslations.onLocaleChangedCallback = _onLocaleChanged;
+    translationsBloc = TranslationsBloc();
   }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      localizationsDelegates: <LocalizationsDelegate>[
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate
-      ],
-      supportedLocales: allTranslations.supportedLocales(),
-      home: HomeScreen()
+    return BlocProvider<TranslationsBloc>(
+      bloc: translationsBloc,
+      child: StreamBuilder<Locale>(
+        stream: translationsBloc.currentLocale,
+        initialData: allTranslations.locale,
+        builder: (BuildContext context, AsyncSnapshot<Locale> snapshot){
+
+          return MaterialApp(
+            title: 'Internatianolization',
+            locale: snapshot.data ?? allTranslations.locale,
+            localizationsDelegates: [
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate
+            ],
+            supportedLocales: allTranslations.supportedLocales(),
+            routes: {
+//              '/': (BuildContext context) => HomeScreen(),
+              '/other_screen': (BuildContext context) => OtherScreen()
+            },
+            home: HomeScreen(),
+          );
+        },
+      ),
     );
   }
 
-  void _onLocaleChanged() async {
-    print('Language has been changed to: ${allTranslations.currentLanguage}');
+  @override
+  void dispose() {
+    translationsBloc?.dispose();
+    super.dispose();
+
   }
 }

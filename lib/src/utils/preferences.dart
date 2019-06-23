@@ -6,7 +6,7 @@ const String _kDefaultLanguage = 'en';
 
 Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
-
+Preferences preferences = Preferences();
 
 class Preferences{
 
