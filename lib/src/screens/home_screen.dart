@@ -18,7 +18,7 @@ class HomeScreen extends StatelessWidget {
 
     final String buttonCaption = allTranslations.text('homeScreen.buttons.${otherLanguage == 'en' ? 'english' : 'russian'}');
 
-    String stringSize = allTranslations.valueToString(1.8, translationsNumberFormat: GlobalTranslationsNumberFormat.normal, numberOfDecimals: 2);
+    String stringSize = allTranslations.valueToString(1.8, format: GlobalTranslationsNumberFormat.normal, numberOfDecimals: 2);
 
     return Scaffold(
       appBar: AppBar(

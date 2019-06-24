@@ -33,9 +33,9 @@ class GlobalTranslations{
 
 
   // one-time initialization
-  Future<Null> init([String language]) async {
+  Future<Null> init() async {
     if(_locale == null){
-      await setNewLanguage(language);
+      await setNewLanguage();
     }
     return null;
   }
@@ -72,26 +72,27 @@ class GlobalTranslations{
   ///
   /// Of course combinations of (plural or gender) and values are possible
 
-  String text(String key, {Map<String, dynamic> values, num plural, GlobalTranslationsGender gender}){
+  String text(String key, {Map<String, dynamic> values, num plural, GlobalTranslationsGender gender}) {
 
     // [gender] and [plural] cannot be set at the same time
     assert((){
-      if(gender != null && plural != null){
+      if (gender != null && plural != null){
         throw FlutterError('Gender and plural cannot be defined at the same time');
       }
       return true;
     }());
 
+
     // Processes the template replacements if any
     String _processTemplate(String template){
-      if(values == null){
+      if (values == null){
         return template;
       }
 
       String output = template;
 
       values.forEach((String key, dynamic value){
-        if(value != null && (values is String || value is num)){
+        if (value != null && (value is String || value is num)){
           output = output.replaceAll('{{$key}}', value.toString());
         }
       });
@@ -100,12 +101,11 @@ class GlobalTranslations{
     }
 
     // Return the requested string
-    String string = '$key is not found';
+    String string = '$key not found';
 
-    if(_localizedValues != null){
-
-      //Check if the requested [key] is in the cache
-      if(_cache[key] != null){
+    if (_localizedValues != null) {
+      // Check if the requested [key] is in the cache
+      if (_cache[key] != null){
         return _processTemplate(_cache[key]);
       }
 
@@ -113,39 +113,39 @@ class GlobalTranslations{
       bool found = true;
       Map<dynamic, dynamic> _values = _localizedValues;
       List<String> _keyParts = key.split('.');
-      int _keyPartsLength = _keyParts.length;
+      int _keyPartsLen = _keyParts.length;
       int index = 0;
-      int lastIndex = _keyPartsLength - 1;
+      int lastIndex = _keyPartsLen - 1;
 
-      while (index < _keyPartsLength && found){
+      while(index < _keyPartsLen && found){
         var value = _values[_keyParts[index]];
 
-        // Not found
-        if(value == null){
+        if (value == null) {
+          // Not found
           found = false;
           break;
         }
 
-        if((plural != null || gender != null) && index == lastIndex && value is Map){
-          if(plural != null){
-            if(plural == 0 && value.containsKey('=0')){
-              string = value['=0'];
+        // Check if we deal with plural or gender
+        if ((plural != null || gender != null) && index == lastIndex && value is Map){
+          if (plural != null){
+            if (plural == 0 && value.containsKey("=0")){
+              string = value["=0"];
               found = true;
             }
-            else if(plural == 1 && value.containsKey('=1')){
-              string = value['=1'];
+            else if (plural == 1 && value.containsKey("=1")){
+              string = value["=1"];
               found = true;
             }
-            else if(plural > 1 && value.containsKey('>1')){
-              string = value['>1'];
+            else if (plural > 1 && value.containsKey(">1")){
+              string = value[">1"];
               found = true;
             }
-
-            if(found){
+            if (found){
               break;
             }
           }
-          else if(gender != null){
+          else if (gender != null){
             if (gender == GlobalTranslationsGender.male && value.containsKey("male")){
               string = value["male"];
               found = true;
@@ -162,20 +162,19 @@ class GlobalTranslations{
         }
 
         // Check if we found the requested key
-        if(value is String && index == lastIndex){
-
+        if (value is String && index == lastIndex){
           string = value;
+
           // Add to cache
           _cache[key] = string;
           break;
         }
 
-        // Go to next subKey
+        // go to next subKey
         _values = value;
         index++;
       }
     }
-
     return _processTemplate(string);
   }
 
@@ -186,36 +185,33 @@ class GlobalTranslations{
 
 
   Future<Null> setNewLanguage([String newLanguage]) async {
-
     String language = newLanguage;
-
-    if(language == null){
+    if (language == null){
       language = await preferences.getPreferredLanguage();
     }
 
-    // If not in the preferences get the current locale
-    if(language == ''){
+    // If not in the preferences, get the current locale
+    if (language == ''){
       String currentLocale = Platform.localeName.toLowerCase();
-
-      if(currentLocale.length > 2){
-        if(currentLocale[2] == '-' || currentLocale[2] == '_'){
+      if (currentLocale.length > 2){
+        if (currentLocale[2] == "-" || currentLocale[2] == "_"){
           language = currentLocale.substring(0, 2);
         }
       }
     }
 
-    if(_kSupportedLanguages.contains(language)){
-      language = '';
+    if (!_kSupportedLanguages.contains(language)){
+      language = "";
     }
 
     // Set the locale
-    if(language == ''){
+    if (language == ""){
       language = preferences.defaultLanguage;
     }
-    _locale = Locale(language, '');
+    _locale = Locale(language, "");
 
     // Load the language strings
-    String jsonContent = await rootBundle.loadString('assets/locale/i18n_${_locale.languageCode}.json');
+    String jsonContent = await rootBundle.loadString("assets/locale/i18n_${_locale.languageCode}.json");
     _localizedValues = json.decode(jsonContent);
 
     // Clear the cache
@@ -228,10 +224,10 @@ class GlobalTranslations{
 
   // Number to String
   // Stringify a value, based on a format (also based on the current Locale)
-  String valueToString(num value, {GlobalTranslationsNumberFormat translationsNumberFormat = GlobalTranslationsNumberFormat.normal, int numberOfDecimals = 2}){
+  String valueToString(num value, {GlobalTranslationsNumberFormat format = GlobalTranslationsNumberFormat.normal, int numberOfDecimals = 2,}){
     NumberFormat numberFormat;
 
-    switch(translationsNumberFormat){
+    switch(format){
       case GlobalTranslationsNumberFormat.currency:
         numberFormat = NumberFormat.currency(locale: _locale.languageCode);
         break;
